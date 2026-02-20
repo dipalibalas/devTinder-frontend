@@ -1,25 +1,35 @@
 import React,{useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {useDispatch} from "react-redux";
+import { addUser } from '../utils/userSlice';
+
+import { BASE_URL } from '../utils/constants';
 
 const Login = () => {
-    const [emailId,setEmailId] = useState("");
-    const [password,setPassword] = useState("");
+    const [emailId,setEmailId] = useState("Deep@gmail.com");
+    const [password,setPassword] = useState("Deep@123#");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const handleLogin =async ()=>{
-         try {
-      await axios.post(
-        "http://localhost:7777" + "/login",
-        {
-          emailId,
-          password,
-        },
-        { withCredentials: true }
-      );
-   
-    } catch (err) {
-      console.error(err);
-    }
-    }
+   const handleLogin = async () => {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/login`,
+      {
+      emailId,   // match backend field name
+      password,
+      },
+      { withCredentials: true }
+    );
+
+    dispatch(addUser(res.data));
+    navigate("/");
+
+  } catch (err) {
+    console.log("Login Error:", err.response?.data || err.message);
+  }
+};
   return (
     <div className="flex justify-center my-10">
       <div className="card bg-base-300 w-96 shadow-xl">
