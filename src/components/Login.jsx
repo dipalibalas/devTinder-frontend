@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {useDispatch} from "react-redux";
 import { addUser } from '../utils/userSlice';
-
 import { BASE_URL } from '../utils/constants';
 
 const Login = () => {
     const [emailId,setEmailId] = useState("Deep@gmail.com");
     const [password,setPassword] = useState("Deep@123#");
+    const [error,setError] = useState("")
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -28,6 +28,7 @@ const Login = () => {
 
   } catch (err) {
     console.log("Login Error:", err.response?.data || err.message);
+    setError(err?.response?.data || "Something went wrong");
   }
 };
   return (
@@ -59,6 +60,7 @@ const Login = () => {
               />
             </label>
           </div>
+          <p className="text-red-500">{error}</p>
           <div className="card-actions justify-center m-2">
             <button className="btn btn-primary" onClick={handleLogin}>
               Login
