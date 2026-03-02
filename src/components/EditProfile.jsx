@@ -1,42 +1,49 @@
-import React,{useState} from 'react';
-import axios from 'axios';
-import UserCard from './UserCard';
-import { BASE_URL } from '../utils/constants';
-import { useDispatch } from 'react-redux';
-import { addUser } from '../utils/userSlice';
+import { useState } from "react";
+import UserCard from "./UserCard";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
-const EditProfile = ({user}) => {
-    const [firstName,setFirstName] = useState(user.firstName);
-    const [lastName,setLastName] = useState(user.lastName);
-    const [photoUrl,setPhotoUrl] = useState(user.photoUrl);
-    const [age,setAge] = useState(user.age);
-    const[about,setAbout] = useState(user.about);
-    const [gender,setGender] = useState(user.gender);
-    const [error,setError] = useState("");
+const EditProfile = ({ user }) => {
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
+  const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
+  const [age, setAge] = useState(user.age);
+  const [gender, setGender] = useState(user.gender);
+  const [about, setAbout] = useState(user.about);
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const [showToast, setShowToast] = useState(false);
 
-    const dispatch = useDispatch();
-    const[showToast,setShowToast] = useState(false);
-
-    const saveProfile = async()=>{
-        setError("");
-
-        try{
-            const res = await axios.patch(BASE_URL + "/profile/edit",{
-                firstName,lastName,age,gender,about,photoUrl
-            },{withCredentials:true});
-
-            dispatch(addUser(res?.data?.data));
-            setShowToast(true);
-
-            setTimeout(()=>{
-                setShowToast(false)
-            },3000)
-        }catch(err){
-            setError(err.response.data)
-        }
+  const saveProfile = async () => {
+    //Clear Errors
+    setError("");
+    try {
+      const res = await axios.patch(
+        BASE_URL + "/profile/edit",
+        {
+          firstName,
+          lastName,
+          photoUrl,
+          age,
+          gender,
+          about,
+        },
+        { withCredentials: true }
+      );
+      dispatch(addUser(res?.data?.data));
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    } catch (err) {
+      setError(err.response.data);
     }
+  };
+
   return (
-   <>
+    <>
       <div className="flex justify-center my-10">
         <div className="flex justify-center mx-10">
           <div className="card bg-base-300 w-96 shadow-xl">
@@ -131,7 +138,6 @@ const EditProfile = ({user}) => {
         </div>
       )}
     </>
-  )
-}
-
-export default EditProfile
+  );
+};
+export default EditProfile;

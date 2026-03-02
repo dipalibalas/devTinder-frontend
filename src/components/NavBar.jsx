@@ -27,7 +27,7 @@ const NavBar = () => {
         </Link>
       </div>
       {user && (
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center">
           <div className="form-control">Welcome, {user.firstName}</div>
           <div className="dropdown dropdown-end mx-5 flex">
             <div
@@ -50,7 +50,11 @@ const NavBar = () => {
                 </Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to="/connections">Connections</Link>
+              </li>
+
+              <li>
+                <Link to="/requests">Requests</Link>
               </li>
               <li>
                 <a onClick={handleLogout}>Logout</a>
