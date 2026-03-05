@@ -13,26 +13,31 @@ export const Chat = () => {
     const user = useSelector(store => store.user);
     const userId = user?._id;
 
-    const fetchChatMessages = async() =>{
-        const chat = await axios.get(BASE_URL + "/chat/" + targetUserId,{
-            withCredentials:true
-        });
+    useEffect(() => {
+  const fetchChatMessages = async () => {
+    try {
+      const chat = await axios.get(BASE_URL + "/chat/" + targetUserId, {
+        withCredentials: true,
+      });
 
-        const chatMessages = chat?.data?.messages?.map((msg)=>{
-            const{senderId, text} = msg;
-            return{
-                firstName: senderId?.firstName,
-                lastName: senderId?.lastName,
-                text,
-            };
-        });
+      const chatMessages = chat?.data?.messages?.map((msg) => {
+        const { senderId, text } = msg;
 
-        setMessages(chatMessages)
-    };
+        return {
+          firstName: senderId?.firstName,
+          lastName: senderId?.lastName,
+          text,
+        };
+      });
 
-    useEffect(()=>{
-        fetchChatMessages();
-    },[]);
+      setMessages(chatMessages);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchChatMessages();
+}, [targetUserId]);
 
     // create a scket connection when page is load
     useEffect(()=>{
